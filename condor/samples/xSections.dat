@@ -685,3 +685,13 @@ QCD_HT1000to1500_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                      
 QCD_HT1500to2000_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                            0.00006166
 QCD_HT2000toInf_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                             0.00001022
 
+### PNetAK4 Feb2024
+#WHHTo4b
+WHHTo4B_CV_0_5_C2V_1_0_C3_1_0_TuneCP5_13TeV-madgraph-pythia8             0.000362398736*0.5824*0.5824
+WHHTo4B_CV_1_0_C2V_0_0_C3_1_0_TuneCP5_13TeV-madgraph-pythia8             0.000190723324*0.5824*0.5824
+WHHTo4B_CV_1_0_C2V_1_0_C3_0_0_TuneCP5_13TeV-madgraph-pythia8             0.000297684676*0.5824*0.5824
+WHHTo4B_CV_1_0_C2V_1_0_C3_1_0_TuneCP5_13TeV-amcatnlo-pythia8             0.000519299806*0.5824*0.5824
+WHHTo4B_CV_1_0_C2V_1_0_C3_20_0_TuneCP5_13TeV-madgraph-pythia8            0.0263251912*0.5824*0.5824            
+WHHTo4B_CV_1_0_C2V_1_0_C3_2_0_TuneCP5_13TeV-madgraph-pythia8             0.000853859286*0.5824*0.5824
+WHHTo4B_CV_1_0_C2V_2_0_C3_1_0_TuneCP5_13TeV-madgraph-pythia8             0.00140173096*0.5824*0.5824
+WHHTo4B_CV_1_5_C2V_1_0_C3_1_0_TuneCP5_13TeV-madgraph-pythia8             0.001117355402*0.5824*0.5824
