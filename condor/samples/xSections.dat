@@ -736,3 +736,12 @@ TTHHTo4b_HEFT_kl-2                          0.00027603262668800005
 TTHHTo4b_HEFT_kl-3                          0.0003527573504
 TTHHTo4b_HEFT_kt-2                          0.003112066048000001
 TTHHTo4b                                    0.00024862609408000003
+
+###BSM
+#
+NMSSM_XToYHTo6B_MX-400_MY-250                 1
+GluGluToBulkGravitonToHHTo4B_M-1000           1
+GluGluToBulkGravitonToHHTo4B_M-1200           1
+GluGluToBulkGravitonToHHTo4B_M-500            1
+GluGluToBulkGravitonToHHTo4B_M-600            1
+GluGluToBulkGravitonToHHTo4B_M-800            1

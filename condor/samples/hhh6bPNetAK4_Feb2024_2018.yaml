@@ -97,3 +97,27 @@ tthh:
     xs: TTHHTo4b_HEFT_kt-2
   - dataset: TTHHTo4b_TuneCP5_13TeV-madgraph-pythia8
     xs: TTHHTo4b
+  
+bbbb:
+  - dataset: powheg2018_bbbb_kl_0p00
+    xs: ggHHto4B_13TeV_cHHH0
+  - dataset: powheg2018_bbbb_kl_1p0
+    xs: ggHHto4B_13TeV
+  - dataset: powheg2018_bbbb_kl_2p45
+    xs: ggHHto4B_13TeV_cHHH2p45
+  - dataset: powheg2018_bbbb_kl_5p00
+    xs: ggHHto4B_13TeV_cHHH5
+
+BSM:
+  - dataset: NMSSM_XToYHTo6B_MX-400_MY-250_TuneCP5_13TeV-madgraph-pythia8
+    xs: NMSSM_XToYHTo6B_MX-400_MY-250
+  - dataset: GluGluToBulkGravitonToHHTo4B_M-1000_narrow_TuneCP5_13TeV-madgraph-pythia8
+    xs: GluGluToBulkGravitonToHHTo4B_M-1000
+  - dataset: GluGluToBulkGravitonToHHTo4B_M-1200_narrow_TuneCP5_13TeV-madgraph-pythia8
+    xs: GluGluToBulkGravitonToHHTo4B_M-1200
+  - dataset: GluGluToBulkGravitonToHHTo4B_M-500_narrow_TuneCP5_13TeV-madgraph-pythia8
+    xs: GluGluToBulkGravitonToHHTo4B_M-500
+  - dataset: GluGluToBulkGravitonToHHTo4B_M-600_narrow_TuneCP5_13TeV-madgraph-pythia8
+    xs: GluGluToBulkGravitonToHHTo4B_M-600
+  - dataset: GluGluToBulkGravitonToHHTo4B_M-800_narrow_TuneCP5_13TeV-madgraph-pythia8
+    xs: GluGluToBulkGravitonToHHTo4B_M-800
