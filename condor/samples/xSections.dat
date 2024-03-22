@@ -685,3 +685,63 @@ QCD_HT1000to1500_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                      
 QCD_HT1500to2000_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                            0.00006166
 QCD_HT2000toInf_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                             0.00001022
 
+### PNetAK4 Feb2024
+#WHHTo4b and ZHHTo4b
+#cross sections from https://docs.google.com/spreadsheets/d/1H7ho7_F7dvqbGGzJSLTMjkamhr-5cpPtPLfQ5jWUCy0/edit#gid=0
+WHHTo4B_CV_0_5_C2V_1_0_C3_1_0             0.00012292194028814337
+WHHTo4B_CV_1_0_C2V_0_0_C3_1_0             6.469139849396224e-05
+WHHTo4B_CV_1_0_C2V_1_0_C3_0_0             0.00010097159380811777
+WHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.0001761411765651866
+WHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.008929235285082113            
+WHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.00028962032629211137
+WHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.00047545278790696966
+WHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.0003789955106390835
+
+ZHHTo4B_CV_0_5_C2V_1_0_C3_1_0             7.876010309672961e-05
+ZHHTo4B_CV_1_0_C2V_0_0_C3_1_0             4.324669440000001e-05
+ZHHTo4B_CV_1_0_C2V_1_0_C3_0_0             7.292772228431873e-05
+ZHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.00012404142184505346
+ZHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.005621129223929857
+ZHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.00019898981149745154
+ZHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.00031949506544836606
+ZHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.00027132051842301954
+
+###HHH
+HHHTo6B_c3_0_d4_99                          0.0010357238013624323
+HHHTo6B_c3_0_d4_minus1                      7.158998771957761e-06
+HHHTo6B_c3_19_d4_19                         0.026036314518323205
+HHHTo6B_c3_1_d4_0                           5.070957463470081e-06
+HHHTo6B_c3_1_d4_2                           2.7952492445696003e-06
+HHHTo6B_c3_2_d4_minus1                      1.0094504339046402e-05
+HHHTo6B_c3_4_d4_9                           4.3104126160076803e-05
+HHHTo6B_c3_minus1_d4_0                      1.9833429268889604e-05
+HHHTo6B_c3_minus1_d4_minus1                 1.9110417803509764e-05
+HHHTo6B_c3_minus1p5_d4_minus0p5             3.40368512253952e-05
+
+###TTHH
+#cross section from https://gitlab.cern.ch/azecchin/inference/-/blob/master/dhi/models/tthh_model_C2klkt.py?ref_type=heads#L53-67
+TTHHTo2B2Tau_HEFT_c2-3                      0.0008693694464
+TTHHTo2B2Tau_HEFT_c2-6                      0.00304790700032
+TTHHTo2B2Tau_HEFT_c2-m1                     0.000169344401408
+TTHHTo2B2Tau_HEFT_kl-0p5_c2-1               0.000155536769024
+TTHHTo2B2Tau_HEFT_kl-2                      5.9453181132800004e-05
+TTHHTo2B2Tau_HEFT_kl-3                      7.597850623999999e-05
+TTHHTo2B2Tau_HEFT_kt-2                      0.0006702911488
+TTHHTo2B2Tau                                5.3550235648e-05
+TTHHTo4b_HEFT_c2-3                          0.004036358144000001
+TTHHTo4b_HEFT_c2-6                          0.014150996787200002
+TTHHTo4b_HEFT_c2-m1                         0.00078624186368
+TTHHTo4b_HEFT_kl-0p5_c2-1                   0.0007221349990400001
+TTHHTo4b_HEFT_kl-2                          0.00027603262668800005
+TTHHTo4b_HEFT_kl-3                          0.0003527573504
+TTHHTo4b_HEFT_kt-2                          0.003112066048000001
+TTHHTo4b                                    0.00024862609408000003
+
+###BSM
+#
+NMSSM_XToYHTo6B_MX-400_MY-250                 1
+GluGluToBulkGravitonToHHTo4B_M-1000           1
+GluGluToBulkGravitonToHHTo4B_M-1200           1
+GluGluToBulkGravitonToHHTo4B_M-500            1
+GluGluToBulkGravitonToHHTo4B_M-600            1
+GluGluToBulkGravitonToHHTo4B_M-800            1
