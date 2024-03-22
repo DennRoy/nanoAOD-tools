@@ -6,7 +6,12 @@ import sys
 if len(sys.argv) < 3:
     print("Syntax: haddnano.py out.root input1.root input2.root ...")
 ofname = sys.argv[1]
-files = sys.argv[2:]
+
+if '.root' in sys.argv[2]:
+    files = sys.argv[2:]
+elif '.txt' in sys.argv[2]:
+    with open(sys.argv[2], 'r') as text_file:
+        files = list(text_file.read().splitlines())
 
 
 def zeroFill(tree, brName, brObj, allowNonBool=False):

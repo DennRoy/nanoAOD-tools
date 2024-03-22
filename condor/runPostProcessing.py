@@ -13,6 +13,12 @@ import logging
 #logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
 logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] %(levelname)s: %(message)s')
 
+
+def splitlist(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
+
+
 def get_chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
@@ -338,21 +344,26 @@ def create_metadata(args):
         additional = 0
         for idx, chunk in enumerate(get_chunks(md['inputfiles'][samp], args.nfiles_per_job)):
             nevents = 0
-            for c in chunk:
-              nevents += GetNevents('/store/'+c.split('/store/')[-1])
-            if nevents < 400000:
+            if 'Run2023' in chunk[0] or 'Run2024' in chunk[0]:
+                for c in chunk:
+                  nevents += GetNevents('/store/'+c.split('/store/')[-1])
+                print(c)
+                if nevents < 400000:
+                    md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
+                    tidx = tidx+1
+                else:
+                    div = int(nevents/400000)+1
+                    maxent = int(nevents/div)+1
+                    start = 0
+                    for i in range(div):
+                        md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
+                        tidx = tidx+1
+                        if i!=div-1:
+                          additional += 1
+                          start += maxent
+            else:
                 md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
                 tidx = tidx+1
-            else:
-                div = int(nevents/400000)+1
-                maxent = int(nevents/div)+1
-                start = 0
-                for i in range(div):
-                    md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
-                    tidx = tidx+1
-                    if i!=div-1:
-                      additional += 1
-                      start += maxent
     return md
 
 
@@ -598,16 +609,41 @@ def run_add_weight(args):
         with open("tmp.txt","r") as f: d = f.readlines()
         cmd = ''
         isTooLong = False
+        isTooTooLong = False
+
         if len(d)>100: isTooLong = True
+
         if isTooLong:
             #for idx, chunk in enumerate(get_chunks(d, 100)):
             #cmd += 'haddnano.py {outfile}  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), chunk=' '.join(chunk))
-            for idx in range(0,10):
-                cmd += 'haddnano.py {outfile} {outputdir}/pieces/{samp}_{idx}*_tree.root  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), outputdir=args.outputdir, samp=samp, idx=idx)
-            print('cmd ',cmd)
+            
+            if len(d) < 1000:
+                for idx in range(0,10):
+                    cmd += 'haddnano.py {outfile} {outputdir}/pieces/{samp}_{idx}*_tree.root  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), outputdir=args.outputdir, samp=samp, idx=idx)
+                print('cmd ',cmd)
+            else: 
+                # Split list in 20 subset
+                print("Hadding into subsets")
+                subset_d = list(splitlist(d,20))
+                cmd_list = []
+                
+                print('Elements in subset list', len(subset_d))
+
+                for idx in range(len(subset_d)):
+                    # create temporary list of files to pass to haddnano.py modified
+                    out = ''
+                    
+                    for f_in in subset_d[idx]:
+                        out += f_in 
+                    tmp_fname = 'tmp_files_files_%d.txt'%idx
+                    with open(tmp_fname,'w') as f_write:
+                        f_write.write(out)
+                    cmd += 'haddnano.py {outfile} {tmp_fname} \n'.format(outfile=outfile.replace('.root','_%i.root'%idx),tmp_fname=tmp_fname)
+                print(cmd)
         else:
             cmd = 'haddnano.py {outfile} {outputdir}/pieces/{samp}_*_tree.root \n'.format(outfile=outfile, outputdir=args.outputdir, samp=samp)
         logging.debug('...' + cmd)
+
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         log = p.communicate()[0]
         log_lower = log.lower().decode('utf-8')

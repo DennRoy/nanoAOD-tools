@@ -52,7 +52,7 @@ cut_dict_ak8 = {
     '1': '1',
     '2': '1',
     '3': '1',
-    '4': 'nJet > 2 && (%s)',
+    '4': 'nJet > 2',
     #'4': 'nJet > -1',
 }
 
@@ -156,7 +156,7 @@ def _process(args):
         #    #args.cut = cut_dict_ak8[str(option)]%(hlt)
         #    args.cut = cut_dict_ak8[str(option)]
         #else:
-        #    args.cut = cut_dict_ak8[str(option)]
+    args.cut = cut_dict_ak8[str(option)]
 
     if not args.run_data:
         args.imports.extend([('PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer',
@@ -220,6 +220,20 @@ def _process(args):
             opts = copy.deepcopy(args)
             cfg = copy.deepcopy(default_config)
             cfg['jer'] = variation
+            opts.outputdir = os.path.join(os.path.dirname(opts.outputdir), syst_name)
+            opts.jobdir = os.path.join(os.path.dirname(opts.jobdir), syst_name)
+            if args.run_signal:
+                print('run signal')
+                opts.outputdir = opts.outputdir+'_signal'
+                opts.jobdir = opts.jobdir+'_signal'
+            run(opts, configs={nn_cfgname: cfg})
+
+        for variation in ['up', 'down']:
+            syst_name = 'jmr_%s' % variation
+            logging.info('Start making %s trees...' % syst_name)
+            opts = copy.deepcopy(args)
+            cfg = copy.deepcopy(default_config)
+            cfg['jmr'] = variation
             opts.outputdir = os.path.join(os.path.dirname(opts.outputdir), syst_name)
             opts.jobdir = os.path.join(os.path.dirname(opts.jobdir), syst_name)
             if args.run_signal:

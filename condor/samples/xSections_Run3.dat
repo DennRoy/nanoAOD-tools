@@ -57,7 +57,7 @@ QCD-4Jets_HT-1500to2000                      125.4
 QCD-4Jets_HT-2000                            26.34
 
 ## TTbar: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO#Updated_reference_cross_sections, 13.6 TeV
-TTto4Q                                       923.60*0.324*0.324
+TTto4Q                                       923.60*0.676*0.676
 TTtoLNu2Q                                    923.60*0.324*0.676*2
 
 ## VV: XSDB (https://xsdb-temp.app.cern.ch/)
