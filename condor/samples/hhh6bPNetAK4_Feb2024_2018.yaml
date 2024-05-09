@@ -121,3 +121,19 @@ BSM:
     xs: GluGluToBulkGravitonToHHTo4B_M-600
   - dataset: GluGluToBulkGravitonToHHTo4B_M-800_narrow_TuneCP5_13TeV-madgraph-pythia8
     xs: GluGluToBulkGravitonToHHTo4B_M-800
+
+hh:
+  - dataset: GluGluToHHTo4B_cHHH2p45_TuneCP5_PSWeights_13TeV-powheg-pythia8
+    xs: ggHHto4B_13TeV_cHHH2p45
+
+tth:
+  - dataset: ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8
+    xs: ttHTobb_M125
+  - dataset: ttHTobb_ttTo2L2Nu_M125_TuneCP5_13TeV-powheg-pythia8
+    xs: ttHTobb_ttTo2L2Nu_M125
+  - dataset: ttHTobb_ttToSemiLep_M125_TuneCP5_13TeV-powheg-pythia8
+    xs: ttHTobb_ttToSemiLep_M125
+  - dataset: ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8
+    xs: ttHToNonbb_M125
+  - dataset: ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
+    xs: ttHToTauTau_M125
