@@ -33,10 +33,26 @@ tt:
     xs: TTto4Q
   - dataset: TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8
     xs: TTtoLNu2Q
+  - dataset: TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8
+    xs: TTto2L2Nu
+
+dy:
+  - dataset: DYto2L-4Jets_MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8
+    xs: DYto2L-MLL-50
+  - dataset: DYTo2L_MLL-4to50_TuneCP5_13p6TeV_pythia8
+    xs: DYTo2L_MLL-4to50
 
 vv:
+  - dataset: WWto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8
+    xs: WWto2L2Nu
+  - dataset: WWtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8
+    xs: WWtoLNuQQ
   - dataset: WWto4Q_TuneCP5_13p6TeV_powheg-pythia8
     xs: WWto4Q
+  - dataset: WW_TuneCP5_13p6TeV_pythia8
+    xs: WW
+  - dataset: WZ_TuneCP5_13p6TeV_pythia8
+    xs: WZ
   - dataset: ZZ_TuneCP5_13p6TeV_pythia8
     xs: ZZ
 
@@ -51,6 +67,8 @@ vvv:
     xs: ZZZ
 
 vjets:
+  - dataset: WtoLNu-4Jets_TuneCP5_13p6TeV_madgraphMLM-pythia8
+    xs: WtoLNu
   - dataset: Wto2Q-3Jets_HT-200to400_TuneCP5_13p6TeV_madgraphMLM-pythia8
     xs: Wto2Q-3Jets_HT-200to400
   - dataset: Wto2Q-3Jets_HT-400to600_TuneCP5_13p6TeV_madgraphMLM-pythia8
