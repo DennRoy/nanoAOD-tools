@@ -752,3 +752,9 @@ ttHTobb_ttTo2L2Nu_M125       0.5418    #total_uncertainty=0.004864
 ttHTobb_ttToSemiLep_M125     0.5418    #total_uncertainty=0.004864
 ttHToNonbb_M125              0.5638    #total_uncertainty=0.02855
 ttHToTauTau_M125             0.5269    #total_uncertainty=0.003834 
+
+#VH
+#cross section from https://xsecdb-xsdb-official.app.cern.ch/xsdb/
+WminusH_HToBB_WToQQ_XSDB          0.3675    #total_uncertainty=0.0003838
+WplusH_HToBB_WToQQ_XSDB           0.589     #total_uncertainty=0.0006989
+ZH_HToBB_ZToQQ_XSDB               0.5612	   #total_uncertainty=0.001332

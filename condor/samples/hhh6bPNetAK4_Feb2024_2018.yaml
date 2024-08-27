@@ -137,3 +137,11 @@ tth:
     xs: ttHToNonbb_M125
   - dataset: ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
     xs: ttHToTauTau_M125
+
+VH:
+  - dataset: WminusH_HToBB_WToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
+    xs: WminusH_HToBB_WToQQ_XSDB
+  - dataset: WplusH_HToBB_WToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
+    xs: WplusH_HToBB_WToQQ_XSDB
+  - dataset: ZH_HToBB_ZToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
+    xs: ZH_HToBB_ZToQQ_XSDB
