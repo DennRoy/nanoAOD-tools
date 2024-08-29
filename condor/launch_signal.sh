@@ -1,4 +1,4 @@
-VERSION=v33-additional-signals
+VERSION=v34-LPCDR
 YEAR=$1
 
 #python2 runHHH6b.py --option 0 -o ${VERSION} --year 2017 --run-data -n 1

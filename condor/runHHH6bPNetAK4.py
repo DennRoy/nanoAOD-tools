@@ -92,17 +92,25 @@ samples = {
         "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
     ],
     '2018': [
-        "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8",
-        "ZZZ_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WZZ_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "WZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"ZZZ_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WZZ_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        "QCD_HT100to200_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT300to500_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT500to700_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT700to1000_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT2000ToInf_TuneCP5_13TeV-madgraphMLM-pythia8",
     ],
 }
-samples = None 
+#samples = None 
 
 def _process(args):
     args.jet_type = 'ak8'
@@ -138,7 +146,8 @@ def _process(args):
         args.json = golden_json[year]
     elif args.run_signal:
         #args.datasets = '%s/%s_%d_signalcHH1.yaml' % (args.sample_dir, sample_str, year)    
-        args.datasets = '%s/%s_Feb2024_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
+        #args.datasets = '%s/%s_Feb2024_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
+        args.datasets = '%s/%s_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
     else:
         args.datasets = '%s/%s_%s_MC.yaml' % (args.sample_dir, sample_str, year)
         #args.datasets = '%s/%s_%d_qcd.yaml' % (args.sample_dir, sample_str, year)
