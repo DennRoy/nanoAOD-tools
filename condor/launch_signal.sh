@@ -1,4 +1,4 @@
-VERSION=v34-LPCDR
+VERSION=v33-VH-Prod
 YEAR=$1
 
 #python2 runHHH6b.py --option 0 -o ${VERSION} --year 2017 --run-data -n 1

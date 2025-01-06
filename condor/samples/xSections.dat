@@ -746,7 +746,6 @@ GluGluToBulkGravitonToHHTo4B_M-500            1
 GluGluToBulkGravitonToHHTo4B_M-600            1
 GluGluToBulkGravitonToHHTo4B_M-800            1
 
-<<<<<<< HEAD
 ###ttH
 ttHTobb_M125                 0.5269    #total_uncertainty=0.003834
 ttHTobb_ttTo2L2Nu_M125       0.5418    #total_uncertainty=0.004864
@@ -759,13 +758,3 @@ ttHToTauTau_M125             0.5269    #total_uncertainty=0.003834
 WminusH_HToBB_WToQQ_XSDB          0.3675    #total_uncertainty=0.0003838
 WplusH_HToBB_WToQQ_XSDB           0.589     #total_uncertainty=0.0006989
 ZH_HToBB_ZToQQ_XSDB               0.5612	   #total_uncertainty=0.001332
-=======
-
-###ttH
-ttHTobb_M125                 0.5269*5.824e-01    #total_uncertainty=0.003834
-ttHTobb_ttTo2L2Nu_M125       0.5418*0.333*0.333*5.824e-01    #total_uncertainty=0.004864
-ttHTobb_ttToSemiLep_M125     0.5418*2*0.667*0.333*5.824e-01    #total_uncertainty=0.004864
-ttHToNonbb_M125              0.5638*(1-5.824e-01)    #total_uncertainty=0.02855
-ttHToTauTau_M125             0.5269*0.06272    #total_uncertainty=0.003834
-
->>>>>>> d950a43 (Conflcit solving)
