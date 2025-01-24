@@ -1,0 +1,23 @@
+# format: 
+# name
+#  sample name (same as list) 
+list: 
+  - nano/v9-pnetAK4/2017
+tthh:
+  - dataset: TTHHTo4b_HEFT_c2-3_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_c2-3
+  - dataset: TTHHTo4b_HEFT_c2-6_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_c2-6
+  - dataset: TTHHTo4b_HEFT_c2-m1_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_c2-m1
+  - dataset: TTHHTo4b_HEFT_kl-0p5_c2-1_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_kl-0p5_c2-1
+  - dataset: TTHHTo4b_HEFT_kl-2_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_kl-2
+  - dataset: TTHHTo4b_HEFT_kl-3_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_kl-3
+  - dataset: TTHHTo4b_HEFT_kt-2_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b_HEFT_kt-2
+  - dataset: TTHHTo4b_TuneCP5_13TeV-madgraph-pythia8
+    xs: TTHHTo4b
+  

@@ -146,7 +146,8 @@ def _process(args):
         args.json = golden_json[year]
     elif args.run_signal:
         #args.datasets = '%s/%s_%d_signalcHH1.yaml' % (args.sample_dir, sample_str, year)    
-        args.datasets = '%s/%s_Feb2024_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
+        # args.datasets = '%s/%s_Feb2024_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
+        args.datasets = '%s/%s_ttHH_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
         #args.datasets = '%s/%s_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
     else:
         args.datasets = '%s/%s_%s_MC.yaml' % (args.sample_dir, sample_str, year)
