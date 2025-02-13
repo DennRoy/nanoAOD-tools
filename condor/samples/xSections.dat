@@ -621,10 +621,10 @@ GJets_HT_600ToInf_13TeV 93.47
 
 #DiHiggs
 #xsce from https://gitlab.cern.ch/hh/tools/inference/-/blob/hhh_nonres_model/dhi/models/hh_model.py?ref_type=heads#L194-197
-ggHHto4B_13TeV           0.031047
-ggHHto4B_13TeV_cHHH0     0.069725
-ggHHto4B_13TeV_cHHH2p45  0.013124
-ggHHto4B_13TeV_cHHH5     0.091172
+ggHHto4B_13TeV           31.047e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH0     69.725e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH2p45  13.124e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH5     91.172e-3*5.824e-01*5.824e-01
 
 ggHHto2B2Tau_13TeV           31.05e-3*5.824e-01*0.06272 * 2
 ggHHto2B2Tau_13TeV_cHHH5     91.7e-3*5.824e-01*0.06272 * 2
