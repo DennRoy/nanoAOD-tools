@@ -720,23 +720,24 @@ HHHTo6B_c3_minus1_d4_minus1                 0.09674*1e-3*2.7339*5.824e-01*5.824e
 HHHTo6B_c3_minus1p5_d4_minus0p5             0.1723*1e-3*2.7339*5.824e-01*5.824e-01*5.824e-01
 
 ###TTHH
-#cross section from https://gitlab.cern.ch/azecchin/inference/-/blob/master/dhi/models/tthh_model_C2klkt.py?ref_type=heads#L53-67
-TTHHTo2B2Tau_HEFT_c2-3                      0.0008693694464
-TTHHTo2B2Tau_HEFT_c2-6                      0.00304790700032
-TTHHTo2B2Tau_HEFT_c2-m1                     0.000169344401408
-TTHHTo2B2Tau_HEFT_kl-0p5_c2-1               0.000155536769024
-TTHHTo2B2Tau_HEFT_kl-2                      5.9453181132800004e-05
-TTHHTo2B2Tau_HEFT_kl-3                      7.597850623999999e-05
-TTHHTo2B2Tau_HEFT_kt-2                      0.0006702911488
-TTHHTo2B2Tau                                5.3550235648e-05
-TTHHTo4b_HEFT_c2-3                          0.004036358144000001
-TTHHTo4b_HEFT_c2-6                          0.014150996787200002
-TTHHTo4b_HEFT_c2-m1                         0.00078624186368
-TTHHTo4b_HEFT_kl-0p5_c2-1                   0.0007221349990400001
-TTHHTo4b_HEFT_kl-2                          0.00027603262668800005
-TTHHTo4b_HEFT_kl-3                          0.0003527573504
-TTHHTo4b_HEFT_kt-2                          0.003112066048000001
-TTHHTo4b                                    0.00024862609408000003
+#cross section from https://gitlab.cern.ch/hh/tools/inference/-/blob/hhh_nonres_model/dhi/models/tthh_model_C2klkt.py?ref_type=heads#L53-67
+TTHHTo2B2Tau_HEFT_c2-3                      0.0119*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_c2-6                      0.04172*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_c2-m1                     0.002318*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-0p5_c2-1               0.002129*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-2                      0.0008138*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-3                      0.00104*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kt-2                      0.0.009175*0.5824*0.06272*2
+TTHHTo2B2Tau                                0.000733*0.5824*0.06272*2
+TTHHTo4b_HEFT_c2-3                          0.0119*0.5824*0.5824
+TTHHTo4b_HEFT_c2-6                          0.04172*0.5824*0.5824
+TTHHTo4b_HEFT_c2-m1                         0.002318*0.5824*0.5824
+TTHHTo4b_HEFT_kl-0p5_c2-1                   0.002129*0.5824*0.5824
+TTHHTo4b_HEFT_kl-2                          0.0008138*0.5824*0.5824
+TTHHTo4b_HEFT_kl-3                          0.00104*0.5824*0.5824
+TTHHTo4b_HEFT_kt-2                          0.009175*0.5824*0.5824
+TTHHTo4b                                    0.000733*0.5824*0.5824
+
 
 ###BSM
 #
