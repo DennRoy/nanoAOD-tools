@@ -756,9 +756,3 @@ ttHTobb_ttTo2L2Nu_M125       0.5071*0.5824*0.105
 ttHTobb_ttToSemiLep_M125     0.5071*0.5824*2*0.6741*0.3259
 ttHToNonbb_M125              0.5071*0.4176
 ttHToTauTau_M125             0.5071*0.06272
-
-#VH
-#cross section from https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2020/244
-WminusH_HToBB_WToQQ          0.2135
-WplusH_HToBB_WToQQ          0.3422
-ZH_HToBB_ZToQQ               0.3260
