@@ -620,10 +620,11 @@ GJets_HT_400To600_13TeV 277.6
 GJets_HT_600ToInf_13TeV 93.47
 
 #DiHiggs
-ggHHto4B_13TeV           31.05e-3*5.824e-01*5.824e-01
-ggHHto4B_13TeV_cHHH0     69.7e-3*5.824e-01*5.824e-01
-ggHHto4B_13TeV_cHHH2p45  13.15e-3*5.824e-01*5.824e-01
-ggHHto4B_13TeV_cHHH5     91.7e-3*5.824e-01*5.824e-01
+#xsce NNLO from https://gitlab.cern.ch/hh/recommendations/-/blob/master/CrossSections.md?ref_type=heads
+ggHHto4B_13TeV           31.047e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH0     69.725e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH2p45  13.124e-3*5.824e-01*5.824e-01
+ggHHto4B_13TeV_cHHH5     91.329e-3*5.824e-01*5.824e-01
 
 ggHHto2B2Tau_13TeV           31.05e-3*5.824e-01*0.06272 * 2
 ggHHto2B2Tau_13TeV_cHHH5     91.7e-3*5.824e-01*0.06272 * 2
@@ -671,9 +672,6 @@ HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5 1
 VBFHToWWToLNuQQ_M125_NNPDF31_TuneCP5_PSweights_13TeV_powheg_JHUGen710_pythia8 1
 
 
-#TripleHiggs
-ggHHHto6B_13TeV         0.0894e-3*5.824e-01*5.824e-01*5.824e-01
-ggHHHto4B2Tau_13TeV         0.0894e-3*5.824e-01*5.824e-01*0.06272*3
 
 # QCD to 6 b-quarks
 QCD_HT100to200_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                              1.0650
@@ -688,54 +686,59 @@ QCD_HT2000toInf_6b_TuneCUETP8M1_13TeV-madgraphMLM-pythia8                       
 ### PNetAK4 Feb2024
 #WHHTo4b and ZHHTo4b
 #cross sections from https://docs.google.com/spreadsheets/d/1H7ho7_F7dvqbGGzJSLTMjkamhr-5cpPtPLfQ5jWUCy0/edit#gid=0
-WHHTo4B_CV_0_5_C2V_1_0_C3_1_0             0.00012292194028814337
-WHHTo4B_CV_1_0_C2V_0_0_C3_1_0             6.469139849396224e-05
-WHHTo4B_CV_1_0_C2V_1_0_C3_0_0             0.00010097159380811777
-WHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.0001761411765651866
-WHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.008929235285082113            
-WHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.00028962032629211137
-WHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.00047545278790696966
-WHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.0003789955106390835
+WHHTo4B_CV_0_5_C2V_1_0_C3_1_0             0.000362398736*5.824e-01*5.824e-01
+WHHTo4B_CV_1_0_C2V_0_0_C3_1_0             0.000190723324*5.824e-01*5.824e-01
+WHHTo4B_CV_1_0_C2V_1_0_C3_0_0             0.000297684676*5.824e-01*5.824e-01
+WHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.000519299806*5.824e-01*5.824e-01
+WHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.0263251912*5.824e-01*5.824e-01         
+WHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.000853859286*5.824e-01*5.824e-01
+WHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.00140173096*5.824e-01*5.824e-01
+WHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.001117355402*5.824e-01*5.824e-01
 
-ZHHTo4B_CV_0_5_C2V_1_0_C3_1_0             7.876010309672961e-05
-ZHHTo4B_CV_1_0_C2V_0_0_C3_1_0             4.324669440000001e-05
-ZHHTo4B_CV_1_0_C2V_1_0_C3_0_0             7.292772228431873e-05
-ZHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.00012404142184505346
-ZHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.005621129223929857
-ZHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.00019898981149745154
-ZHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.00031949506544836606
-ZHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.00027132051842301954
+ZHHTo4B_CV_0_5_C2V_1_0_C3_1_0             0.00023220071*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_0_0_C3_1_0             0.0001275*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_1_0_C3_0_0             0.000215005672*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_1_0_C3_1_0             0.000365699194*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_1_0_C3_20_0            0.0165722256*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_1_0_C3_2_0             0.000586662202*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_0_C2V_2_0_C3_1_0             0.000941936058*5.824e-01*5.824e-01
+ZHHTo4B_CV_1_5_C2V_1_0_C3_1_0             0.000799907752*5.824e-01*5.824e-01
 
 ###HHH
-HHHTo6B_c3_0_d4_99                          0.0010357238013624323*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_0_d4_minus1                      7.158998771957761e-06*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_19_d4_19                         0.026036314518323205*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_1_d4_0                           5.070957463470081e-06*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_1_d4_2                           2.7952492445696003e-06*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_2_d4_minus1                      1.0094504339046402e-05*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_4_d4_9                           4.3104126160076803e-05*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_minus1_d4_0                      1.9833429268889604e-05*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_minus1_d4_minus1                 1.9110417803509764e-05*2.55*5.824e-01*5.824e-01*5.824e-01
-HHHTo6B_c3_minus1p5_d4_minus0p5             3.40368512253952e-05*2.55*5.824e-01*5.824e-01*5.824e-01
+#TripleHiggs
+ggHHHto6B_13TeV         0.03274*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+ggHHHto4B2Tau_13TeV         0.03274*1e-3*2.41*5.824e-01*5.824e-01*0.06272*3
+
+HHHTo6B_c3_0_d4_99                          5.243*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_0_d4_minus1                      0.03624*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_19_d4_19                         131.8*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_1_d4_0                           0.02567*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_1_d4_2                           0.01415*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_2_d4_minus1                      0.0511*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_4_d4_9                           0.2182*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_minus1_d4_0                      0.1004*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_minus1_d4_minus1                 0.09674*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
+HHHTo6B_c3_minus1p5_d4_minus0p5             0.1723*1e-3*2.41*5.824e-01*5.824e-01*5.824e-01
 
 ###TTHH
-#cross section from https://gitlab.cern.ch/azecchin/inference/-/blob/master/dhi/models/tthh_model_C2klkt.py?ref_type=heads#L53-67
-TTHHTo2B2Tau_HEFT_c2-3                      0.0008693694464
-TTHHTo2B2Tau_HEFT_c2-6                      0.00304790700032
-TTHHTo2B2Tau_HEFT_c2-m1                     0.000169344401408
-TTHHTo2B2Tau_HEFT_kl-0p5_c2-1               0.000155536769024
-TTHHTo2B2Tau_HEFT_kl-2                      5.9453181132800004e-05
-TTHHTo2B2Tau_HEFT_kl-3                      7.597850623999999e-05
-TTHHTo2B2Tau_HEFT_kt-2                      0.0006702911488
-TTHHTo2B2Tau                                5.3550235648e-05
-TTHHTo4b_HEFT_c2-3                          0.004036358144000001
-TTHHTo4b_HEFT_c2-6                          0.014150996787200002
-TTHHTo4b_HEFT_c2-m1                         0.00078624186368
-TTHHTo4b_HEFT_kl-0p5_c2-1                   0.0007221349990400001
-TTHHTo4b_HEFT_kl-2                          0.00027603262668800005
-TTHHTo4b_HEFT_kl-3                          0.0003527573504
-TTHHTo4b_HEFT_kt-2                          0.003112066048000001
-TTHHTo4b                                    0.00024862609408000003
+#cross section from https://gitlab.cern.ch/hh/tools/inference/-/blob/hhh_nonres_model/dhi/models/tthh_model_C2klkt.py?ref_type=heads#L53-67
+TTHHTo2B2Tau_HEFT_c2-3                      0.0119*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_c2-6                      0.04172*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_c2-m1                     0.002318*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-0p5_c2-1               0.002129*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-2                      0.0008138*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kl-3                      0.00104*0.5824*0.06272*2
+TTHHTo2B2Tau_HEFT_kt-2                      0.0.009175*0.5824*0.06272*2
+TTHHTo2B2Tau                                0.000733*0.5824*0.06272*2
+TTHHTo4b_HEFT_c2-3                          0.0119*0.5824*0.5824
+TTHHTo4b_HEFT_c2-6                          0.04172*0.5824*0.5824
+TTHHTo4b_HEFT_c2-m1                         0.002318*0.5824*0.5824
+TTHHTo4b_HEFT_kl-0p5_c2-1                   0.002129*0.5824*0.5824
+TTHHTo4b_HEFT_kl-2                          0.0008138*0.5824*0.5824
+TTHHTo4b_HEFT_kl-3                          0.00104*0.5824*0.5824
+TTHHTo4b_HEFT_kt-2                          0.009175*0.5824*0.5824
+TTHHTo4b                                    0.000733*0.5824*0.5824
+
 
 ###BSM
 #
@@ -747,14 +750,10 @@ GluGluToBulkGravitonToHHTo4B_M-600            1
 GluGluToBulkGravitonToHHTo4B_M-800            1
 
 ###ttH
-ttHTobb_M125                 0.5269    #total_uncertainty=0.003834
-ttHTobb_ttTo2L2Nu_M125       0.5418    #total_uncertainty=0.004864
-ttHTobb_ttToSemiLep_M125     0.5418    #total_uncertainty=0.004864
-ttHToNonbb_M125              0.5638    #total_uncertainty=0.02855
-ttHToTauTau_M125             0.5269    #total_uncertainty=0.003834 
-
-#VH
-#cross section from https://xsecdb-xsdb-official.app.cern.ch/xsdb/
-WminusH_HToBB_WToQQ_XSDB          0.3675    #total_uncertainty=0.0003838
-WplusH_HToBB_WToQQ_XSDB           0.589     #total_uncertainty=0.0006989
-ZH_HToBB_ZToQQ_XSDB               0.5612	   #total_uncertainty=0.001332
+#cross section from https://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2022/122
+#tt BR from https://pdg.lbl.gov/2022/reviews/rpp2021-rev-top-quark.pdf
+ttHTobb_M125                 0.5071*0.5824  
+ttHTobb_ttTo2L2Nu_M125       0.5071*0.5824*0.105
+ttHTobb_ttToSemiLep_M125     0.5071*0.5824*2*0.6741*0.3259
+ttHToNonbb_M125              0.5071*0.4176
+ttHToTauTau_M125             0.5071*0.06272
