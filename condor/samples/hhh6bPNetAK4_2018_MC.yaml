@@ -226,10 +226,10 @@ tth:
 
 VH:
   - dataset: WminusH_HToBB_WToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
-    xs: WminusH_HToBB_WToQQ_XSDB
+    xs: WminusH_HToBB_WToQQ
   - dataset: WplusH_HToBB_WToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
-    xs: WplusH_HToBB_WToQQ_XSDB
+    xs: WplusH_HToBB_WToQQ
   - dataset: ZH_HToBB_ZToQQ_M-125_TuneCP5_13TeV-powheg-pythia8
-    xs: ZH_HToBB_ZToQQ_XSDB
+    xs: ZH_HToBB_ZToQQ
 
   
