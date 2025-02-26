@@ -30,7 +30,9 @@ def xrd_prefix(filepaths):
         # remote file
         import socket
         host = socket.getfqdn()
-        if 'cern.ch' in host:
+        if "dmroy" in filepath:
+            prefix = 'root://cmsxrootd.hep.wisc.edu/'
+        elif 'cern.ch' in host:
             prefix = 'root://xrootd-cms.infn.it//'
         else:
             prefix = 'root://cmseos.fnal.gov//'

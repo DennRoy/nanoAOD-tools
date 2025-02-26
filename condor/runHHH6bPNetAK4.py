@@ -130,10 +130,10 @@ def _process(args):
     basename = os.path.basename(args.outputdir) + '_' + args.jet_type + '_option' + option + '_' + year
 
     args.outputdir = os.path.join(os.path.dirname(args.outputdir), basename, 'data' if args.run_data else 'mc')
-    args.jobdir = os.path.join('jobs_%s' % basename, 'data' if args.run_data else 'mc')
+    args.jobdir = os.path.join(args.jobdir+'_%s' % basename, 'data' if args.run_data else 'mc')
     if args.run_signal:
         args.outputdir = args.outputdir.replace('mc','signal')
-        args.jobdir = os.path.join('jobs_%s' % basename, 'signal')
+        args.jobdir = os.path.join(args.jobdir+'_%s' % basename, 'signal')
 
     sample_str = "hhh6bPNetAK4"
     if option == "10": sample_str = "tt"

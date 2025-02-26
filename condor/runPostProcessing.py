@@ -343,27 +343,23 @@ def create_metadata(args):
         # create jobs
         additional = 0
         for idx, chunk in enumerate(get_chunks(md['inputfiles'][samp], args.nfiles_per_job)):
-            nevents = 0
-            if 'Run2023' in chunk[0] or 'Run2024' in chunk[0]:
-                for c in chunk:
-                  nevents += GetNevents('/store/'+c.split('/store/')[-1])
-                print(c)
-                if nevents < 400000:
-                    md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
-                    tidx = tidx+1
-                else:
-                    div = int(nevents/400000)+1
-                    maxent = int(nevents/div)+1
-                    start = 0
-                    for i in range(div):
-                        md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
-                        tidx = tidx+1
-                        if i!=div-1:
-                          additional += 1
-                          start += maxent
-            else:
-                md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
-                tidx = tidx+1
+            #nevents = 0
+            #for c in chunk:
+            #  nevents += GetNevents('/store/'+c.split('/store/')[-1])
+            #maxevent = 999999999 #400000
+            #if nevents < maxevent: # Allow splitting jobs if files are too large; ignore for now, need to know how to handle xsec weight if not all parts processed
+            md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
+            tidx = tidx+1
+            #else:
+            #    div = int(nevents/maxevent)+1
+            #    maxent = int(nevents/div)+1
+            #    start = 0
+            #    for i in range(div):
+            #        md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
+            #        tidx = tidx+1
+            #        if i!=div-1:
+            #          additional += 1
+            #          start += maxent
     return md
 
 
@@ -373,9 +369,72 @@ def load_metadata(args):
         md = json.load(f)
     return md
 
+def check_job_status_onelog(args, onelog):
+    md = load_metadata(args)
+    njobs = len(md['jobs'])
+    jobids = {'running': [], 'failed': [], 'completed': []}
+    singlejobid = 0
+    for f in onelog:
+        jobid = int(f.split(".")[0])
+        if jobid > singlejobid: singlejobid = jobid
+    logpath = os.path.join(args.jobdir, '%d.log' % singlejobid)
+    resubmitpath = os.path.join(args.jobdir, 'resubmit.txt')
+    mapping = {}
+    read = [True]*njobs
+    if not os.path.exists(logpath):
+        for jobid in range(njobs):
+            mapping[jobid] = jobid
+            read[jobid] = False
+    else:
+        with open(resubmitpath) as logfile:
+            for i,jobid in enumerate([line.rstrip() for line in logfile]):
+                jobid = int(jobid)
+                mapping[i] = jobid
+                read[jobid] = False
+    errormsg = [None]*njobs
+    finished = [v for v in read] # jobids not in the resubmit file are already done -> No need to check them
+    with open(logpath) as logfile:
+        for line in reversed(logfile.readlines()):
+            jobid = -1
+            pattern = re.match(".*\(%d\.([0-9]+)\.000\).*"%singlejobid, line)
+            if pattern != None:
+                jobid = mapping[int(pattern.group(1))]
+                if 'Job removed' in line or 'aborted' in line:
+                    errormsg[jobid] = line
+                    read[jobid] = True
+                if 'Job submitted from host' in line and read[jobid]==False:
+                    # if seeing this first: the job has been resubmited
+                    read[jobid] = True
+                if 'return value' in prevline and read[jobid]==False:
+                    if 'return value 0' in prevline:
+                        finished[jobid] = True
+                    else:
+                        errormsg[jobid] = prevline
+                    read[jobid] = True
+            prevline = line
+        for jobid in range(njobs):
+            if errormsg[jobid]:
+                logging.debug(logpath + '\n   ' + errormsg[jobid])
+                jobids['failed'].append(str(jobid))
+            else:
+                if finished[jobid]:
+                    jobids['completed'].append(str(jobid))
+                else:
+                    #jobids['running'].append(str(jobid)) # This workflow doesn't work here: If a job is not resubmitted now, it's assumed to have finished later
+                    jobids['failed'].append(str(jobid))
+    assert sum(len(jobids[k]) for k in jobids) == njobs
+    all_completed = len(jobids['completed']) == njobs
+    info = {k: len(jobids[k]) for k in jobids if len(jobids[k])}
+    logging.info('Job %s status: ' % args.jobdir + str(info))
+    print(jobids['running'])
+    return all_completed, jobids
+
 def check_job_status(args):
     md = load_metadata(args)
     njobs = len(md['jobs'])
+    alllogs = [f for f in os.listdir(args.jobdir) if f.endswith(".log")]
+    onelog = [f for f in alllogs if int(f.split(".")[0]) > njobs*10] # Find single log file being used for all jobs. If we have too many jobs and they all write in parallel to separate files to lxplus AFS at the same time, this causes major slowdown for all users on that AFS space
+    if len(onelog)>0: return check_job_status_onelog(args, onelog)
     jobids = {'running': [], 'failed': [], 'completed': []}
     for jobid in range(njobs):
         logpath = os.path.join(args.jobdir, '%d.log' % jobid)
@@ -421,6 +480,20 @@ def submit(args, configs):
     macrofile = os.path.join(os.path.dirname(__file__), 'processor.py')
     metadatafile = os.path.join(args.jobdir, args.metadata)
     joboutputdir = os.path.join(args.outputdir, 'pieces')
+    isRemote = joboutputdir.startswith("/store/")
+    if isRemote:
+        from XRootD import client
+        from XRootD.client.flags import MkDirFlags
+        import socket
+        host = socket.getfqdn()
+        if "dmroy" in joboutputdir:
+            prefix = 'root://cmsxrootd.hep.wisc.edu/'
+        elif 'cern.ch' in host:
+            prefix = 'root://xrootd-cms.infn.it//'
+        else:
+            prefix = 'root://cmseos.fnal.gov//'
+        myclient = client.FileSystem(prefix)
+        mycopyclient = client.CopyProcess()
 
     # create config file for the scripts
     configfiles = []
@@ -433,6 +506,9 @@ def submit(args, configs):
         ans = input('jobdir %s already exists, resubmit jobs? [yn] ' % args.jobdir)
         if ans.lower()[0] == 'y':
             args.resubmit = True
+            args.prefetch = True
+            args.request_memory = str(2*int(args.request_memory))
+            if args.max_runtime=="24*60*60": args.max_runtime="3*24*60*60"
 
     if not args.resubmit:
         # create jobdir
@@ -454,14 +530,20 @@ def submit(args, configs):
                 if ans.lower()[0] == 'n':
                     sys.exit(1)
         else:
-            os.makedirs(joboutputdir)
+            if not isRemote:
+                os.makedirs(joboutputdir)
+            else:
+                myclient.mkdir(joboutputdir, MkDirFlags.MAKEPATH)
 
         # create config file for the scripts
         if configs is not None:
             for cfgname, cfgpath in zip(configs, configfiles):
                 with open(cfgpath, 'w') as f:
                     json.dump(configs[cfgname], f, ensure_ascii=True, indent=2, sort_keys=True)
-                shutil.copy2(cfgpath, joboutputdir)
+                if not isRemote:
+                    shutil.copy2(cfgpath, joboutputdir)
+                else:
+                    mycopyclient.add_job(os.path.abspath(cfgpath), os.path.join(prefix+joboutputdir, cfgpath.split("/")[-1]))
 
         # create metadata file
         md = create_metadata(args)
@@ -470,8 +552,20 @@ def submit(args, configs):
             json.dump(md, f, ensure_ascii=True, indent=2, sort_keys=True)
         # store the metadata file to the outputdir as well
         import gzip
-        with gzip.open(os.path.join(args.outputdir, args.metadata+'.gz'), 'w') as fout:
-            fout.write(json.dumps(md).encode('utf-8'))
+        if not isRemote:
+            with gzip.open(os.path.join(args.outputdir, args.metadata+'.gz'), 'w') as fout:
+                fout.write(json.dumps(md).encode('utf-8'))
+        else:
+            tmpoutdir = args.tmpoutdir
+            for temp in args.tmpoutdir.split("/"):
+              if temp.startswith("$"): tmpoutdir = tmpoutdir.replace(temp, os.getenv(temp.replace("$","")))
+            with gzip.open(os.path.join(tmpoutdir, args.metadata+'.gz'), 'w') as fout:
+                fout.write(json.dumps(md).encode('utf-8'))
+            mycopyclient.add_job(os.path.join(tmpoutdir, args.metadata+'.gz'), os.path.join(prefix+args.outputdir, args.metadata+'.gz'))
+            mycopyclient.prepare()
+            mycopyclient.run()
+            os.remove(os.path.join(tmpoutdir, args.metadata+'.gz'))
+            
 
         njobs = len(md['jobs'])
         jobids = [str(jobid) for jobid in range(njobs)]
@@ -547,7 +641,7 @@ arguments             = $(jobid)
 transfer_input_files  = {files_to_transfer}
 output                = {jobdir}/$(jobid).out
 error                 = {jobdir}/$(jobid).err
-log                   = {jobdir}/$(jobid).log
+log                   = {jobdir}/$(ClusterId).log
 use_x509userproxy     = true
 Should_Transfer_Files = YES
 initialdir            = {initialdir}
@@ -565,7 +659,7 @@ queue jobid from {jobids_file}
            files_to_transfer=','.join(files_to_transfer),
            jobdir=os.path.abspath(args.jobdir),
            # when outputdir is on EOS, disable file transfer as file is manually copied to EOS in processor.py
-           initialdir=os.path.abspath(args.jobdir) if joboutputdir.startswith('/eos') else joboutputdir,
+           initialdir=os.path.abspath(args.jobdir),
            transfer_output='transfer_output_files = ""' if joboutputdir.startswith('/eos') else '',
            jobids_file=os.path.abspath(jobids_file),
            site='+DESIRED_Sites = "%s"' % args.site if args.site else '',
@@ -595,51 +689,105 @@ def run_add_weight(args):
     parts_dir = os.path.join(args.outputdir, 'parts')
     #status_file = os.path.join(parts_dir, '.success')
     print(parts_dir)
+    isRemote = parts_dir.startswith("/store/")
+    if isRemote:
+        from XRootD import client
+        from XRootD.client.flags import MkDirFlags, OpenFlags
+        import socket
+        host = socket.getfqdn()
+        if "dmroy" in parts_dir:
+            prefix1 = 'root://cmsxrootd.hep.wisc.edu/'
+            prefix = 'davs://cmsxrootd.hep.wisc.edu:1094/'
+        elif 'cern.ch' in host:
+            prefix1 = 'root://xrootd-cms.infn.it//'
+            prefix = 'root://xrootd-cms.infn.it//'
+        else:
+            prefix1 = 'root://cmseos.fnal.gov//'
+            prefix = 'root://cmseos.fnal.gov//'
+        myclient = client.FileSystem(prefix1)
+        mycopyclient = client.CopyProcess()
+        def GetFromGfal(command):
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
+            out = ""
+            for line in iter(process.stdout.readline,b""):
+                if isinstance(line,bytes):
+                    line = line.decode('utf-8')
+                out += line
+            process.stdout.close()
+            retcode = process.wait()
+            out = out.strip()
+            return out
     #if os.path.exists(status_file):
     #    return
-    if not os.path.exists(parts_dir):
-        os.makedirs(parts_dir)
+    if not isRemote:
+        if not os.path.exists(parts_dir):
+            os.makedirs(parts_dir)
+    else:
+        myclient.mkdir(parts_dir, MkDirFlags.MAKEPATH)
 
+    #GiveHaddCommandsForRemote = True # Unfeasibly slow otherwise 'TODO DELME
+    #if GiveHaddCommandsForRemote and os.path.isfile("haddnanoRemoteCommands.txt"):
+    #  os.remove("haddnanoRemoteCommands.txt")
+    #if GiveHaddCommandsForRemote: remcomfile = open("haddnanoRemoteCommands.txt", "a")
     for samp in md['samples']:
         outfile = '{parts_dir}/{samp}_tree.root'.format(parts_dir=parts_dir, samp=samp)
-        if os.path.isfile(outfile):
-            print(samp,"is done!")
-            continue # Skip already successful hadds, assume the user removed the failures beforehand. This obsoletes the "status_file"
-        os.system('ls {outputdir}/pieces/{samp}_*_tree.root > tmp.txt'.format(outputdir=args.outputdir, samp=samp))
-        with open("tmp.txt","r") as f: d = f.readlines()
+        if not isRemote:
+            if os.path.isfile(outfile):
+                print(samp,"is done!")
+                continue # Skip already successful hadds, assume the user removed the failures beforehand. This obsoletes the "status_file"
+            os.system('ls {outputdir}/pieces/{samp}_*_tree.root > tmp.txt'.format(outputdir=args.outputdir, samp=samp))
+            with open("tmp.txt","r") as f: d = f.readlines()
+        else:
+            #status, locations = myclient.locate(outfile, OpenFlags.REFRESH)
+            #if locations is not None:
+            #    print(samp,"is done!")
+            #    continue # Skip already successful hadds, assume the user removed the failures beforehand. This obsoletes the "status_file"
+            out = GetFromGfal("(eval $(scram unsetenv -sh); gfal-ls {outfile})".format(outfile=prefix+outfile))
+            if out.endswith(outfile):
+                print(samp,"is done!")
+                continue # Skip already successful hadds, assume the user removed the failures beforehand. This obsoletes the "status_file"
+            out = GetFromGfal("(eval $(scram unsetenv -sh); gfal-ls {outputdir})".format(outputdir=prefix+os.path.join(args.outputdir, "pieces")))
+            d = [prefix+os.path.join(args.outputdir, "pieces", f) for f in out.split() if f.startswith(samp+"_") and f.endswith("_tree.root")]
+        if d==[]: continue
         cmd = ''
         isTooLong = False
-        isTooTooLong = False
-
-        if len(d)>100: isTooLong = True
-
-        if isTooLong:
+        if len(d)>50: isTooLong = True
+        if isTooLong or isRemote:
             #for idx, chunk in enumerate(get_chunks(d, 100)):
             #cmd += 'haddnano.py {outfile}  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), chunk=' '.join(chunk))
-            
-            if len(d) < 1000:
-                for idx in range(0,10):
-                    cmd += 'haddnano.py {outfile} {outputdir}/pieces/{samp}_{idx}*_tree.root  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), outputdir=args.outputdir, samp=samp, idx=idx)
-                print('cmd ',cmd)
-            else: 
-                # Split list in 20 subset
-                print("Hadding into subsets")
-                subset_d = list(splitlist(d,20))
-                cmd_list = []
-                
-                print('Elements in subset list', len(subset_d))
+            split = int(len(d)/50)+1
+            isdone = True
+            for idx in range(0,split):
+                if not isRemote:
+                    if not os.path.isfile('{parts_dir}/{samp}_tree_{idx}.root'.format(parts_dir=parts_dir, samp=samp, idx=idx)): isdone = False
+                else:
+                    if not GetFromGfal("(eval $(scram unsetenv -sh); gfal-ls {outfile})".format(outfile=prefix+outfile.replace(".root", "_{idx}.root".format(idx=idx)))).endswith('{samp}_tree_{idx}.root'.format(parts_dir=parts_dir, samp=samp, idx=idx)): isdone = False
+            if isdone:
+                print(samp,"is done!")
+                continue # Skip already successful hadds, assume the user removed the failures beforehand. This obsoletes the "status_file"
+            nfiles = int(len(d)/split)
+            for idx in range(0,split):
+                thesefiles = d[idx*nfiles:(idx+1)*nfiles]
+                thesefiles = [l.strip() for l in thesefiles]
+                if thesefiles==[]: break
+                if not isRemote:
+                  cmd += 'haddnano.py {outfile} {thesefiles}  \n'.format(outfile=outfile.replace('.root','_%i.root'%idx), thesefiles=' '.join(thesefiles))
+                #elif GiveHaddCommandsForRemote:
+                #  line = 'haddnano.py {outfile} {thesefiles}  \n'.format(outfile=prefix+outfile.replace('.root','_%i.root'%idx), thesefiles=' '.join(thesefiles))
+                #  line = line.replace(prefix, "/hdfs")
+                #  remcomfile.write(line)
+                else:
+                  tmpoutdir = args.tmpoutdir
+                  for temp in args.tmpoutdir.split("/"):
+                    if temp.startswith("$"): tmpoutdir = tmpoutdir.replace(temp, os.getenv(temp.replace("$","")))
+                  for thisfile in thesefiles:
+                    cmd += '(eval $(scram unsetenv -sh); gfal-copy {infile} {tmpout})  \n'.format(infile=thisfile, tmpout=tmpoutdir)
+                  cmd += 'haddnano.py {outfile} {thesefiles}  \n'.format(outfile=os.path.join(tmpoutdir, outfile.split("/")[-1].replace('.root','_%i.root'%idx)), thesefiles=' '.join([os.path.join(tmpoutdir, os.path.basename(thisfile)) for thisfile in thesefiles]))
+                  for thisfile in thesefiles:
+                    cmd += 'rm {infile}  \n'.format(infile=os.path.join(tmpoutdir, os.path.basename(thisfile)))
+                  #cmd += '(eval $(scram unsetenv -sh); gfal-copy {tmpout} {outfile})  \n'.format(tmpout=os.path.join(tmpoutdir, outfile.split("/")[-1].replace('.root','_%i.root'%idx)), outfile=prefix+outfile.replace('.root','_%i.root'%idx))
 
-                for idx in range(len(subset_d)):
-                    # create temporary list of files to pass to haddnano.py modified
-                    out = ''
-                    
-                    for f_in in subset_d[idx]:
-                        out += f_in 
-                    tmp_fname = 'tmp_files_files_%d.txt'%idx
-                    with open(tmp_fname,'w') as f_write:
-                        f_write.write(out)
-                    cmd += 'haddnano.py {outfile} {tmp_fname} \n'.format(outfile=outfile.replace('.root','_%i.root'%idx),tmp_fname=tmp_fname)
-                print(cmd)
+            print('cmd ',cmd)
         else:
             cmd = 'haddnano.py {outfile} {outputdir}/pieces/{samp}_*_tree.root \n'.format(outfile=outfile, outputdir=args.outputdir, samp=samp)
         logging.debug('...' + cmd)
@@ -653,7 +801,7 @@ def run_add_weight(args):
             print('Hadd failed on %s!' % samp)
             continue
             #raise RuntimeError('Hadd failed on %s!' % samp)
-        if isTooLong:
+        if isTooLong or isRemote:
             #cmd = 'haddnano.py {outfile} {parts_dir}/{samp}_tree_*.root \n'.format(outfile=outfile, parts_dir=parts_dir, samp=samp)
             #os.system(cmd)
             #p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -665,7 +813,10 @@ def run_add_weight(args):
             #    os.system('rm {parts_dir}/{samp}_tree_*.root'.format(parts_dir=parts_dir, samp=samp))
             if args.weight_file:
                 import glob
-                filelists = glob.glob("{parts_dir}/{samp}_tree_*.root".format(parts_dir=parts_dir, samp=samp))
+                if not isRemote:
+                    filelists = glob.glob("{parts_dir}/{samp}_tree_*.root".format(parts_dir=parts_dir, samp=samp))
+                else:
+                    filelists = glob.glob("{parts_dir}/{samp}_tree_*.root".format(parts_dir=tmpoutdir, samp=samp))
                 print(filelists)
                 dataset_xs = md['xsec'][samp]
                 if dataset_xs == 1: continue
@@ -673,9 +824,15 @@ def run_add_weight(args):
                 if xsec is not None:
                     logging.info('Adding xsec weight to files, xsec=%f' % (xsec))
                     add_weight_branch_list(filelists, xsec)
+                if isRemote:
+                    for thisfile in filelists:
+                        cmd = '(eval $(scram unsetenv -sh); gfal-copy {tmpout} {outfile})  \n'.format(tmpout=thisfile, outfile=prefix+os.path.dirname(outfile))
+                        cmd += 'rm {tmpout}'.format(tmpout=thisfile)
+                        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                        log = p.communicate()[0]
 
         # add weight
-        if args.weight_file and not isTooLong:
+        if args.weight_file and not isTooLong and not isRemote:
             dataset_xs = md['xsec'][samp]
             if dataset_xs == 1: continue
             try:
