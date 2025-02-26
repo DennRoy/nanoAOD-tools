@@ -52,7 +52,7 @@ cut_dict_ak8 = {
     '1': '1',
     '2': '1',
     '3': '1',
-    '4': 'nJet > 2 && (%s)',
+    '4': 'nJet >= 4',
     #'4': 'nJet > -1',
 }
 
@@ -92,17 +92,25 @@ samples = {
         "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
     ],
     '2018': [
-        "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8",
-        "ZZZ_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WZZ_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8",
-        "WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "WZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
-        "WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"ZZZ_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WZZ_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8",
+        #"WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WZZ_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        #"WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_ext1",
+        "QCD_HT100to200_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT300to500_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT500to700_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT700to1000_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT1000to1500_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT1500to2000_TuneCP5_13TeV-madgraphMLM-pythia8",
+        "QCD_HT2000ToInf_TuneCP5_13TeV-madgraphMLM-pythia8",
     ],
 }
-samples = None 
+#samples = None 
 
 def _process(args):
     args.jet_type = 'ak8'
@@ -137,8 +145,8 @@ def _process(args):
             '$CMSSW_BASE/src/PhysicsTools/NanoNN/data/JSON/%s' % golden_json[year])
         args.json = golden_json[year]
     elif args.run_signal:
-        #args.datasets = '%s/%s_%d_signalcHH1.yaml' % (args.sample_dir, sample_str, year)    
         args.datasets = '%s/%s_%s_signalMC.yaml' % (args.sample_dir, sample_str, year)
+
     else:
         args.datasets = '%s/%s_%s_MC.yaml' % (args.sample_dir, sample_str, year)
         #args.datasets = '%s/%s_%d_qcd.yaml' % (args.sample_dir, sample_str, year)
@@ -156,7 +164,7 @@ def _process(args):
         #    #args.cut = cut_dict_ak8[str(option)]%(hlt)
         #    args.cut = cut_dict_ak8[str(option)]
         #else:
-        #    args.cut = cut_dict_ak8[str(option)]
+    args.cut = cut_dict_ak8[str(option)]
 
     if not args.run_data:
         args.imports.extend([('PhysicsTools.NanoAODTools.postprocessing.modules.common.puWeightProducer',
@@ -220,6 +228,20 @@ def _process(args):
             opts = copy.deepcopy(args)
             cfg = copy.deepcopy(default_config)
             cfg['jer'] = variation
+            opts.outputdir = os.path.join(os.path.dirname(opts.outputdir), syst_name)
+            opts.jobdir = os.path.join(os.path.dirname(opts.jobdir), syst_name)
+            if args.run_signal:
+                print('run signal')
+                opts.outputdir = opts.outputdir+'_signal'
+                opts.jobdir = opts.jobdir+'_signal'
+            run(opts, configs={nn_cfgname: cfg})
+
+        for variation in ['up', 'down']:
+            syst_name = 'jmr_%s' % variation
+            logging.info('Start making %s trees...' % syst_name)
+            opts = copy.deepcopy(args)
+            cfg = copy.deepcopy(default_config)
+            cfg['jmr'] = variation
             opts.outputdir = os.path.join(os.path.dirname(opts.outputdir), syst_name)
             opts.jobdir = os.path.join(os.path.dirname(opts.jobdir), syst_name)
             if args.run_signal:

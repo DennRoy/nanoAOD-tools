@@ -3,11 +3,15 @@ Tools for working with NanoAOD (requiring only python + root, not CMSSW)
 
 ## Set up CMSSW (w PY3), NanoAOD-tools and NanoNN
 
+```
+cmsrel CMSSW_13_3_0
+```
+
 Python3 is needed to re-run the taggers w/ ONNXRuntime.
 `NanoNN` is needed for taggers/regression and PF inputs.
 It also contains the module for the hh4b analysis selection.
 
-    cd CMSSW_11_1_0_pre5_PY3/src
+    cd CMSSW_13_3_0/src
     git clone git@github.com:mstamenk/nanoAOD-tools.git PhysicsTools/NanoAODTools
     git clone git@github.com:mstamenk/NanoNN.git PhysicsTools/NanoNN
     cd PhysicsTools/NanoAODTools
@@ -17,27 +21,17 @@ It also contains the module for the hh4b analysis selection.
 
 ## HHH6b producer
 
-To run the HHH6b producer, copy one of the HHH NanoAOD v9 file from lxplus:
+The producer is located in `../NanoNN/python/producer/hhh6bProducerPNetAK4.py` and contains all the code to run the HHH analysis. The produce runs on NanoAOD samples located either on DAS or on the eos space for HHH. 
+
+The list of files are specified under: `condor/samples/`. There's three files, `_MC` for background Monte-Carlo, `_DATA` for data and `_signalMC`. The current version of the analysis uses `hhh6bPNetAK4_` tag. Once these samples are updated, the list of root files used to run on condor are located under:
+
 ```
-/afs/cern.ch/work/m/mstamenk/public/HHH/HHH6b_RunIISummer20UL17/
+condor/list/nano/v9-pnetAK4
 ```
 
-To run the producer:
-```
-python scripts/nano_postproc.py tmp RunIISummer20UL17NANOAODSIM_1.root -I PhysicsTools.NanoNN.producers.hhh6bProducer hhh6bProducerFromConfig -N 500 --bo scripts/branch_hhh6b_output.txt
-```
+To update new samples, please add them the location list there and then update the list files. 
 
 # Samples path
-For the official CMS samples, the samples are stored on `/store/` of CMS and don't need to be copied locally. This concerning data (JetHT), and QCD, V+jets, VV, VVV, TT. 
-
-For the signal samples, the following path can be used:
-```
-/eos/user/m/mstamenk/CxAOD31run/hhh-samples/HHH6b_RunIISummer20UL17 # 250k events (used by me so far)
-/eos/user/m/mstamenk/CxAOD31run/hhh-6b/run_hhh6b # 10 million events - to be tested for 2016, 2017 and 2018
-``` 
-
-For local tests using 500 events, copy one sample locally and pass it directly to the framework. 
-
 For running on condor with the full production, the samples are given to the framework through a list:
 ```
 NanoAODTools/condor/samples/hhh6b_2017_DATA.yaml
@@ -45,19 +39,9 @@ NanoAODTools/condor/samples/hhh6b_2017_MC.yaml
 NanoAODTools/condor/samples/hhh6b_2017_signalMC.yaml
 NanoAODTools/condor/samples/xSections.dat # with corresponding cross-sections
 ```
-These lists need to be updated for 2016 and 2018.
-
 In addition to the config files (yaml) for the samples in the framework, a list of samples path needs to be created and provided with the correct name matching the yaml:
 ```
-NanoAODTools/condor/list/nano/v9/2017
-```
-
-This list of files can be created using the following scripts for official and private MC productions (scripts need to be updated if using lxplus):
-```
-NanoAODTools/condor/fileset/fileset_nanoaodv9.py
-NanoAODTools/condor/fileset/fileset_eos_hhh.py
-NanoAODTools/condor/fileset/fileset_signal_HHH.py
-NanoAODTools/condor/fileset/fileset_qcd6b_HHH.py
+NanoAODTools/condor/list/nano/v9-pnetAK4/2017
 ```
 
 # Launching full production on condor
@@ -83,19 +67,13 @@ The output paths need to be modified accordingly to write on your private reposi
 # Analysis definition
 The analysis is defined in:
 ```
-NanoNN/python/producers/hhh6bProducer.py
+NanoNN/python/producers/hhh6bProducerPNetAK4.py
 ```
 
 This is where all the main higgs bosons variables are built and defined. This is also where the reocnstruction is done, the pairing of the jets and all the event related variables are built.
 
-In order to run on condor, don't forget to tar the CMSSW project. Only the version in the tar ball is used on the condor batch, the path to it needs to be modified (see instructions below in the README):
-```
-cd $CMSSW_BASE/../;
-tar -zvcf CMSSW_11_1_0_pre5_PY3.tgz CMSSW_11_1_0_pre5_PY3 --exclude="*.pdf" --exclude="*.pyc" --exclude=tmp --exclude-vcs --exclude-caches-all --exclude="*err*" --exclude=*out_* --exclude=condor --exclude=.git --exclude=hhh-bdt --exclude=plottting
-```
 
-
-## HH4b producer
+## HH4b producer [OLD INSTRUCTION KEPT FOR REFERENCE]
 
 ### Testing the post-processing step locally
 

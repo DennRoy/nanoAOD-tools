@@ -13,6 +13,12 @@ import logging
 #logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
 logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] %(levelname)s: %(message)s')
 
+
+def splitlist(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i*k+min(i, m):(i+1)*k+min(i+1, m)] for i in range(n))
+
+
 def get_chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
@@ -337,23 +343,23 @@ def create_metadata(args):
         # create jobs
         additional = 0
         for idx, chunk in enumerate(get_chunks(md['inputfiles'][samp], args.nfiles_per_job)):
-            nevents = 0
-            for c in chunk:
-              nevents += GetNevents('/store/'+c.split('/store/')[-1])
-            maxevent = 999999999 #400000
-            if nevents < maxevent: # Allow splitting jobs if files are too large; ignore for now, need to know how to handle xsec weight if not all parts processed
-                md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
-                tidx = tidx+1
-            else:
-                div = int(nevents/maxevent)+1
-                maxent = int(nevents/div)+1
-                start = 0
-                for i in range(div):
-                    md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
-                    tidx = tidx+1
-                    if i!=div-1:
-                      additional += 1
-                      start += maxent
+            #nevents = 0
+            #for c in chunk:
+            #  nevents += GetNevents('/store/'+c.split('/store/')[-1])
+            #maxevent = 999999999 #400000
+            #if nevents < maxevent: # Allow splitting jobs if files are too large; ignore for now, need to know how to handle xsec weight if not all parts processed
+            md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx})
+            tidx = tidx+1
+            #else:
+            #    div = int(nevents/maxevent)+1
+            #    maxent = int(nevents/div)+1
+            #    start = 0
+            #    for i in range(div):
+            #        md['jobs'].append({'samp': samp, 'idx': idx+additional, 'inputfiles': chunk, 'tidx': tidx, 'firstEntry': start, 'maxEntries': maxent})
+            #        tidx = tidx+1
+            #        if i!=div-1:
+            #          additional += 1
+            #          start += maxent
     return md
 
 
@@ -785,6 +791,7 @@ def run_add_weight(args):
         else:
             cmd = 'haddnano.py {outfile} {outputdir}/pieces/{samp}_*_tree.root \n'.format(outfile=outfile, outputdir=args.outputdir, samp=samp)
         logging.debug('...' + cmd)
+
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         log = p.communicate()[0]
         log_lower = log.lower().decode('utf-8')
